@@ -13,6 +13,24 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public final class Config {
     private Config() {}
 
+    // ---------------- Drivetrain (used by TeleOp's Drive subsystem) ----------------
+    // These MUST match pedro/Constants.java (drivetrainConfig) so TeleOp drives exactly like the tuned auto.
+    // If you change a name or direction in Constants.java, change it here too.
+    public static final String FRONT_LEFT_NAME = "leftFront";
+    public static final String FRONT_RIGHT_NAME = "rightFront";
+    public static final String BACK_LEFT_NAME = "leftBack";
+    public static final String BACK_RIGHT_NAME = "rightBack";
+    public static final DcMotorSimple.Direction FRONT_LEFT_DIRECTION = DcMotorSimple.Direction.REVERSE;
+    public static final DcMotorSimple.Direction FRONT_RIGHT_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    public static final DcMotorSimple.Direction BACK_LEFT_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    public static final DcMotorSimple.Direction BACK_RIGHT_DIRECTION = DcMotorSimple.Direction.REVERSE;
+
+    // ---------------- TeleOp tuning ----------------
+    public static final double SLOW_MODE_SCALE = 0.4;     // hold right bumper
+    public static final double TRIGGER_DEADZONE = 0.1;
+    public static final double AIM_KP = 0.02;              // turn power per degree of Limelight tx (hold X)
+    public static final double AIM_MAX_TURN = 0.35;
+
     // ---------------- Hardware names (must match the Robot Configuration on the Control Hub) ----------------
     public static final String INTAKE_MOTOR_NAME = "intake";
     public static final String LIMELIGHT_NAME = "limelight";
