@@ -33,12 +33,19 @@ public final class Config {
 
     // ---------------- Hardware names (must match the Robot Configuration on the Control Hub) ----------------
     public static final String INTAKE_MOTOR_NAME = "intake";
+    public static final String TRANSFER_MOTOR_NAME = "transfer";
     public static final String LIMELIGHT_NAME = "limelight";
 
     // ---------------- Intake ----------------
     public static final DcMotorSimple.Direction INTAKE_DIRECTION = DcMotorSimple.Direction.FORWARD;
     public static final double INTAKE_POWER = 1.0;      // pulling a game piece in
     public static final double OUTTAKE_POWER = -0.6;    // pushing a game piece out / clearing a jam
+
+    // ---------------- Transfer ----------------
+    // If feed() moves pollen back toward the intake, flip this to REVERSE.
+    public static final DcMotorSimple.Direction TRANSFER_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    public static final double TRANSFER_POWER = 0.8;          // moving pollen forward from the intake
+    public static final double TRANSFER_REVERSE_POWER = -0.5; // backing pollen out / clearing a jam
 
     // ---------------- Limelight ----------------
     // Pipelines are built in the Limelight web interface (http://limelight.local:5801).

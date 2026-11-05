@@ -38,6 +38,7 @@ public class MainAuto extends LinearOpMode {
         robot.setStartPose(paths.start);
 
         telemetry.addData("Intake found", robot.intake.isAvailable());
+        telemetry.addData("Transfer found", robot.transfer.isAvailable());
         telemetry.addData("Limelight found", robot.vision.isAvailable());
         telemetry.update();
 

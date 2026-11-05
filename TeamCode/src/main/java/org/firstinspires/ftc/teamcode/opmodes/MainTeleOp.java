@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Drive;
  *   Right bumper      slow mode (hold)
  *   Right trigger     intake in
  *   Left trigger      intake out (clears jams)
+ *   Left bumper       transfer: move pollen forward from the intake (hold)
+ *   D-pad down        transfer: reverse (hold, clears jams)
  *   A                 Limelight: AprilTag pipeline
  *   B                 Limelight: color pipeline
  *   X (hold)          auto-aim: turns toward the Limelight target (driver still controls forward/strafe)
@@ -36,6 +38,7 @@ public class MainTeleOp extends LinearOpMode {
         robot.vision.useAprilTags();
 
         telemetry.addData("Intake found", robot.intake.isAvailable());
+        telemetry.addData("Transfer found", robot.transfer.isAvailable());
         telemetry.addData("Limelight found", robot.vision.isAvailable());
         telemetry.addLine("Ready. Press START.");
         telemetry.update();
@@ -80,9 +83,19 @@ public class MainTeleOp extends LinearOpMode {
                     robot.intake.stop();
                 }
 
+                // ---- Transfer ----
+                if (gamepad1.left_bumper) {
+                    robot.transfer.feed();
+                } else if (gamepad1.dpad_down) {
+                    robot.transfer.reverse();
+                } else {
+                    robot.transfer.stop();
+                }
+
                 // ---- Telemetry ----
                 telemetry.addData("Slow mode", gamepad1.right_bumper);
                 telemetry.addData("Intake running", robot.intake.isRunning());
+                telemetry.addData("Transfer running", robot.transfer.isRunning());
                 telemetry.addData("Pipeline", robot.vision.getActivePipeline() == Config.PIPELINE_APRILTAG
                         ? "AprilTag" : "Color");
                 telemetry.addData("Target seen", robot.vision.hasTarget());
