@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterServos;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.Vision;
@@ -23,6 +24,7 @@ public class Robot {
     public final Transfer transfer;
     public final Shooter shooter;
     public final Vision vision;
+    public final ShooterServos shooterServos;
 
     public Robot(HardwareMap hardwareMap) {
         follower = Constants.create(hardwareMap);
@@ -30,6 +32,7 @@ public class Robot {
         transfer = new Transfer(hardwareMap);
         shooter = new Shooter(hardwareMap);
         vision = new Vision(hardwareMap);
+        shooterServos = new ShooterServos(hardwareMap);
         vision.start();
     }
 
@@ -43,6 +46,7 @@ public class Robot {
     public void update() {
         follower.update();
         vision.update();
+        shooterServos.update();
     }
 
     /** Call when the OpMode ends. */

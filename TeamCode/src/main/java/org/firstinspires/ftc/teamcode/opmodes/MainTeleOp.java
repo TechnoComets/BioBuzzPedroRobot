@@ -42,6 +42,8 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("Intake found", robot.intake.isAvailable());
         telemetry.addData("Transfer found", robot.transfer.isAvailable());
         telemetry.addData("Limelight found", robot.vision.isAvailable());
+        telemetry.addData("Shooter Left found", robot.shooterServos.isLeftAvailable());
+        telemetry.addData("Shooter Right found", robot.shooterServos.isRightAvailable());
         telemetry.addLine("Ready. Press START.");
         telemetry.update();
         shooter = new Shooter(hardwareMap);
@@ -54,6 +56,7 @@ public class MainTeleOp extends LinearOpMode {
         try {
             while (opModeIsActive()) {
                 robot.vision.update();
+                robot.shooterServos.update(); // Continuously enforce shooter servo positions every loop
 
                 // ---- Vision pipeline switching (on button press, not while held) ----
                 if (gamepad1.a && !lastA) robot.vision.useAprilTags();
@@ -106,6 +109,7 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("Target seen", robot.vision.hasTarget());
                 telemetry.addData("tx", robot.vision.getTx());
                 telemetry.addData("Auto-aim active", aiming);
+                telemetry.addData("Shooter Target Pos", robot.shooterServos.getTargetPosition());
                 telemetry.update();
             }
         } finally {
