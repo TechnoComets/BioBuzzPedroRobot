@@ -44,6 +44,14 @@ public class Transfer {
         setPower(0);
     }
 
+    public void transfer() {
+        feed();
+    }
+
+    public void rest() {
+        stop();
+    }
+
     /** Manual control. Range -1.0 to 1.0. */
     public void setPower(double power) {
         if (motor != null) {

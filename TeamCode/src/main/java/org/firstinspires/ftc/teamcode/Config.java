@@ -56,4 +56,9 @@ public final class Config {
     public static final int LIMELIGHT_POLL_RATE_HZ = 100;
     // Ignore Limelight results older than this (milliseconds).
     public static final long VISION_MAX_STALENESS_MS = 100;
+
+    // ---------------- Shooter Opening Servos (Hood/Gate) ----------------
+    public static final String SHOOTER_LEFT_SERVO_NAME = "ShooterServoLeft";
+    public static final String SHOOTER_RIGHT_SERVO_NAME = "ShooterServoRight";
+    public static final double SHOOTER_DEFAULT_OPENING_POSITION = 0.5; // Target position to hold opening size against flywheel pressure
 }
