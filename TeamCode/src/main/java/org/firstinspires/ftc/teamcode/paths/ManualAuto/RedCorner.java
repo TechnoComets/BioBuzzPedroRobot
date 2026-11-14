@@ -1,3 +1,5 @@
+package org.firstinspires.ftc.teamcode.paths.ManualAuto;
+
 import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.Pose;
@@ -39,6 +41,7 @@ public class RedCorner extends LinearOpMode {
 
         telemetry.addData("Status", "Initialized Red Corner Auto");
         telemetry.addData("Transfer Available", robot.transfer.isAvailable());
+        telemetry.addData("Shooter Available", robot.shooter.isAvailable());
         telemetry.addData("Intake Available", robot.intake.isAvailable());
         telemetry.update();
 
@@ -71,6 +74,7 @@ public class RedCorner extends LinearOpMode {
         telemetry.update();
 
         // Spin up intake / shooter mechanism and wait for motor speed (no PIDF)
+        robot.shooter.run();
         robot.intake.run();
         sleep(SHOOT_PREP_TIME_MS);
 
@@ -82,17 +86,18 @@ public class RedCorner extends LinearOpMode {
             telemetry.update();
 
             // Cycle transfer mechanism to feed pollen
-            robot.transfer.transfer();
+            robot.transfer.feed();
             sleep(TIME_PER_POLLEN_MS);
 
             // Reset transfer mechanism
-            robot.transfer.rest();
+            robot.transfer.stop();
             sleep(400);
         }
 
-        // Stop transfer & intake
+        // Stop transfer & intake & shooter
         robot.intake.stop();
         robot.transfer.stop();
+        robot.shooter.stop();
         sleep(500);
 
         // ===================================================================

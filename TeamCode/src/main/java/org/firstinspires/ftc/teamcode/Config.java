@@ -20,6 +20,7 @@ public final class Config {
     public static final String FRONT_RIGHT_NAME = "rightFront";
     public static final String BACK_LEFT_NAME = "leftBack";
     public static final String BACK_RIGHT_NAME = "rightBack";
+
     public static final DcMotorSimple.Direction FRONT_LEFT_DIRECTION = DcMotorSimple.Direction.REVERSE;
     public static final DcMotorSimple.Direction FRONT_RIGHT_DIRECTION = DcMotorSimple.Direction.FORWARD;
     public static final DcMotorSimple.Direction BACK_LEFT_DIRECTION = DcMotorSimple.Direction.FORWARD;
@@ -34,26 +35,32 @@ public final class Config {
     // ---------------- Hardware names (must match the Robot Configuration on the Control Hub) ----------------
     public static final String INTAKE_MOTOR_NAME = "intake";
     public static final String TRANSFER_MOTOR_NAME = "transfer";
+    public static final String SHOOTER_MOTOR_NAME = "shooter";
     public static final String LIMELIGHT_NAME = "limelight";
 
     // ---------------- Intake ----------------
     public static final DcMotorSimple.Direction INTAKE_DIRECTION = DcMotorSimple.Direction.FORWARD;
+
+    // Intake toggle
+    public static final boolean INTAKE_TOGGLE_ENABLED = true;
     public static final double INTAKE_POWER = 1.0;      // pulling a game piece in
     public static final double OUTTAKE_POWER = -0.6;    // pushing a game piece out / clearing a jam
 
     // ---------------- Transfer ----------------
     // If feed() moves pollen back toward the intake, flip this to REVERSE.
     public static final DcMotorSimple.Direction TRANSFER_DIRECTION = DcMotorSimple.Direction.FORWARD;
-    public static final double TRANSFER_POWER = 0.8;          // moving pollen forward from the intake
-    public static final double TRANSFER_REVERSE_POWER = -0.5; // backing pollen out / clearing a jam
+    public static final double TRANSFER_POWER = 0.8;            // moving pollen forward from the intake
+    public static final double TRANSFER_REVERSE_POWER = -0.5;   // backing pollen out / clearing a jam
+
+    // ---------------- Shooter ----------------
+    public static final DcMotorSimple.Direction SHOOTER_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    public static final double SHOOTER_POWER = 0.75;
+    public static final double SHOOTER_OUTTAKE_POWER = -1.0;
 
     // ---------------- Limelight ----------------
-    // Pipelines are built in the Limelight web interface (http://limelight.local:5801).
-    // These numbers must match the pipeline slots you configure there.
     public static final int PIPELINE_APRILTAG = 0;
     public static final int PIPELINE_COLOR = 1;
 
     public static final int LIMELIGHT_POLL_RATE_HZ = 100;
-    // Ignore Limelight results older than this (milliseconds).
     public static final long VISION_MAX_STALENESS_MS = 100;
 }

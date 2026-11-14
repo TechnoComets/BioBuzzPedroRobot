@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,16 +8,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.Config;
 
 /**
- * Intake mechanism: one motor that pulls game pieces in (or pushes them out).
- *
- * If the motor is not in the Robot Configuration yet, the intake simply does nothing
- * (isAvailable() returns false) instead of crashing the whole OpMode.
+ * Intake mechanism: one motor that pulls game pieces in or pushes them out.
  */
 public class Intake {
-    private final DcMotorEx motor; // null if not configured
+    private final DcMotorEx motor;
+
+    private boolean intakeOn = false;
+    private boolean previousCircle = false;
 
     public Intake(HardwareMap hardwareMap) {
         motor = hardwareMap.tryGet(DcMotorEx.class, Config.INTAKE_MOTOR_NAME);
+
         if (motor != null) {
             motor.setDirection(Config.INTAKE_DIRECTION);
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -24,17 +26,32 @@ public class Intake {
         }
     }
 
-    /** True if the intake motor was found in the Robot Configuration. */
     public boolean isAvailable() {
         return motor != null;
     }
 
-    /** Pull a game piece in. */
+    /**
+     * Toggle intake using the Circle button.
+     * Call this repeatedly inside the TeleOp loop.
+     */
+    public void update(boolean circlePressed) {
+        if (circlePressed && !previousCircle) {
+            intakeOn = !intakeOn;
+        }
+
+        previousCircle = circlePressed;
+
+        if (intakeOn) {
+            run();
+        } else {
+            stop();
+        }
+    }
+
     public void run() {
         setPower(Config.INTAKE_POWER);
     }
 
-    /** Push a game piece out (also useful for clearing jams). */
     public void reverse() {
         setPower(Config.OUTTAKE_POWER);
     }
@@ -43,7 +60,6 @@ public class Intake {
         setPower(0);
     }
 
-    /** Manual control, e.g. from a gamepad trigger. Range -1.0 to 1.0. */
     public void setPower(double power) {
         if (motor != null) {
             motor.setPower(power);

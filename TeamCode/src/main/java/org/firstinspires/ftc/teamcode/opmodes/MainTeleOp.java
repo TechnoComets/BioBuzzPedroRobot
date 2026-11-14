@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.Drive;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 /**
  * The one TeleOp. Like MainAuto, it only says WHAT the driver can do; hardware lives in
@@ -29,6 +30,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drive;
  */
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
+    private Shooter shooter;
 
     @Override
     public void runOpMode() {
@@ -42,6 +44,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("Limelight found", robot.vision.isAvailable());
         telemetry.addLine("Ready. Press START.");
         telemetry.update();
+        shooter = new Shooter(hardwareMap);
 
         waitForStart();
 
@@ -92,6 +95,8 @@ public class MainTeleOp extends LinearOpMode {
                     robot.transfer.stop();
                 }
 
+                // ----- Shooter ------
+                shooter.update(gamepad1.circle);
                 // ---- Telemetry ----
                 telemetry.addData("Slow mode", gamepad1.right_bumper);
                 telemetry.addData("Intake running", robot.intake.isRunning());
