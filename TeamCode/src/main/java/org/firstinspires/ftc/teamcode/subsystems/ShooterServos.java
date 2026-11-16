@@ -23,6 +23,16 @@ public class ShooterServos {
     public ShooterServos(HardwareMap hardwareMap) {
         leftServo = hardwareMap.tryGet(Servo.class, Config.SHOOTER_LEFT_SERVO_NAME);
         rightServo = hardwareMap.tryGet(Servo.class, Config.SHOOTER_RIGHT_SERVO_NAME);
+
+        // Two servos on opposite sides of the shooter usually face opposite directions. If they
+        // do, the same position command makes them fight each other and neither moves.
+        // Reverse one in Config so they turn the same way.
+        if (leftServo != null && Config.SHOOTER_LEFT_SERVO_REVERSED) {
+            leftServo.setDirection(Servo.Direction.REVERSE);
+        }
+        if (rightServo != null && Config.SHOOTER_RIGHT_SERVO_REVERSED) {
+            rightServo.setDirection(Servo.Direction.REVERSE);
+        }
         
         applyPosition(targetPosition);
     }
@@ -51,13 +61,22 @@ public class ShooterServos {
             leftServo.setPosition(pos);
         }
         if (rightServo != null) {
-            // Note: If your right servo is mirrored, change `pos` to `1.0 - pos`.
             rightServo.setPosition(pos);
         }
     }
 
     public double getTargetPosition() {
         return targetPosition;
+    }
+
+    /** Position last sent to the left servo, or NaN if it was not found. */
+    public double getLeftPosition() {
+        return leftServo != null ? leftServo.getPosition() : Double.NaN;
+    }
+
+    /** Position last sent to the right servo, or NaN if it was not found. */
+    public double getRightPosition() {
+        return rightServo != null ? rightServo.getPosition() : Double.NaN;
     }
 
     public boolean isLeftAvailable() {

@@ -54,7 +54,7 @@ public final class Config {
 
     // ---------------- Shooter ----------------
     public static final DcMotorSimple.Direction SHOOTER_DIRECTION = DcMotorSimple.Direction.FORWARD;
-    public static final double SHOOTER_POWER = 0.75;
+    public static final double SHOOTER_POWER = 0.625;
     public static final double SHOOTER_OUTTAKE_POWER = -1.0;
 
     // ---------------- Limelight ----------------
@@ -68,4 +68,8 @@ public final class Config {
     public static final String SHOOTER_LEFT_SERVO_NAME = "ShooterServoLeft";
     public static final String SHOOTER_RIGHT_SERVO_NAME = "ShooterServoRight";
     public static final double SHOOTER_DEFAULT_OPENING_POSITION = 0.5; // Target position to hold opening size against flywheel pressure
+    // If the two servos face opposite directions (mirrored), set ONE of these to true.
+    public static final boolean SHOOTER_LEFT_SERVO_REVERSED = false;
+    public static final boolean SHOOTER_RIGHT_SERVO_REVERSED = true;
+    public static final double SHOOTER_SERVO_PRESET_POSITION = 0.5; // Position set when Y/Triangle is pressed in TeleOp
 }

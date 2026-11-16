@@ -23,6 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
  *   A                 Limelight: AprilTag pipeline
  *   B                 Limelight: color pipeline
  *   X (hold)          auto-aim: turns toward the Limelight target (driver still controls forward/strafe)
+ *   Y / Triangle      shooter servos: set to Config.SHOOTER_SERVO_PRESET_POSITION (0.75)
  *
  * NOTE: robot.update() is NOT called here, because it runs follower.update(), which is
  * Pedro's path-following loop and would fight manual motor power. Only vision is updated.
@@ -52,6 +53,7 @@ public class MainTeleOp extends LinearOpMode {
 
         boolean lastA = false;
         boolean lastB = false;
+        boolean lastY = false;
 
         try {
             while (opModeIsActive()) {
@@ -98,6 +100,10 @@ public class MainTeleOp extends LinearOpMode {
                     robot.transfer.stop();
                 }
 
+                // ---- Shooter servos (on button press, not while held) ----
+                if (gamepad1.y && !lastY) robot.shooterServos.setPosition(Config.SHOOTER_SERVO_PRESET_POSITION);
+                lastY = gamepad1.y;
+
                 // ----- Shooter ------
                 shooter.update(gamepad1.circle);
                 // ---- Telemetry ----
@@ -109,7 +115,12 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("Target seen", robot.vision.hasTarget());
                 telemetry.addData("tx", robot.vision.getTx());
                 telemetry.addData("Auto-aim active", aiming);
+                telemetry.addData("Y pressed", gamepad1.y);
+                telemetry.addData("Shooter Left found", robot.shooterServos.isLeftAvailable());
+                telemetry.addData("Shooter Right found", robot.shooterServos.isRightAvailable());
                 telemetry.addData("Shooter Target Pos", robot.shooterServos.getTargetPosition());
+                telemetry.addData("Shooter Left Pos", robot.shooterServos.getLeftPosition());
+                telemetry.addData("Shooter Right Pos", robot.shooterServos.getRightPosition());
                 telemetry.update();
             }
         } finally {
