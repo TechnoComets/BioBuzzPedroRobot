@@ -1,3 +1,4 @@
+/*
 
 package org.firstinspires.ftc.teamcode.paths.ManualAuto;
 
@@ -291,3 +292,4 @@ public class BlueFront extends LinearOpMode {
         shooter.setPower(0);
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode.paths.ManualAuto;
 
 import com.pedropathing.api.Paths;
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.Drive;
 
+*/
 /**
  * Autonomous OpMode for Red Corner starting position.
  * Sequence:
@@ -17,7 +19,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Drive;
  * 2. Moves forward to shooting position.
  * 3. Shoots 4 pollens (using time delays since no PIDF velocity control is available).
  * 4. Moves to and parks in the Red Parking Zone.
- */
+ *//*
+
 @Autonomous(name = "Red Corner Auto", group = "Autonomous")
 public class RedCorner extends LinearOpMode {
 
@@ -122,3 +125,4 @@ public class RedCorner extends LinearOpMode {
         telemetry.update();
     }
 }
+*/
