@@ -21,7 +21,7 @@ public class RedFrontAuto extends BaseAuto {
     private RedFrontPaths paths;
 
     // Timing (milliseconds)
-    private static final double SHOOT_MS = 2000; // shooter + intake + transfer
+    private static final double SHOOT_MS = 3000; // shooter + intake + transfer (3 seconds)
 
     @Override
     protected void buildPaths() {
@@ -52,7 +52,10 @@ public class RedFrontAuto extends BaseAuto {
                 }),
 
                 // ---- Park ----
-                follow(robot.follower, paths.path2())
+                follow(robot.follower, paths.path2()),
+
+                // ---- Stop everything at the end of path 2 ----
+                instant(() -> robot.stop())
         );
     }
 }

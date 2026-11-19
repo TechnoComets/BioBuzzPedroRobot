@@ -15,18 +15,17 @@ import com.pedropathing.paths.Path;
 public class RedFrontPaths {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    public final Pose start = poseFactory.of(88, 8, 90);   // PLACEHOLDER
-    private final Pose shoot = poseFactory.of(84, 20, 65);  // PLACEHOLDER
-    private final Pose park = poseFactory.of(106, 12, 90);    // PLACEHOLDER
+    public final Pose start = poseFactory.of(56, 8, 90);
+    private final Pose path1 = poseFactory.of(56, 11.434, 90);
+    private final Pose point2 = poseFactory.of(7.1811, 96.507, 89.4182);
+    private final Pose point2Control1 = poseFactory.of(6.8785, 66.698, 0);
 
-    /** Start -> shooting spot. */
     public Path path1() {
-        return Paths.line(start, shoot).linear(start, shoot);
+        return Paths.line(start, path1).tangent();
     }
 
-    /** Shooting spot -> park. */
     public Path path2() {
-        return Paths.line(shoot, park).linear(shoot, park);
+        return Paths.curve(path1, point2Control1, point2).tangent();
     }
 
     // Add more paths here (path3(), path4(), ...) and call them from RedFrontAuto.
