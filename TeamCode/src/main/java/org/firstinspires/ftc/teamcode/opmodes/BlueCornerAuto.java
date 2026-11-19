@@ -62,7 +62,16 @@ public class BlueCornerAuto extends BaseAuto {
                 }),
 
                 // ---- Park ----
-                follow(robot.follower, paths.path2())
+                follow(robot.follower, paths.path2()),
+
+                // ---- Stop immediately after path 2: drive wheels, every mechanism, then end the autonomous ----
+                instant(() -> {
+                    robot.follower.stop(); // cut the drive motors right away
+                    robot.shooter.stop();
+                    robot.intake.stop();
+                    robot.transfer.stop();
+                    requestOpModeStop(); // ends the OpMode; BaseAuto then calls robot.stop()
+                })
         );
     }
 }
