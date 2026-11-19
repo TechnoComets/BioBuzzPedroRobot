@@ -20,8 +20,10 @@ public class BlueCornerAuto extends BaseAuto {
 
     private BlueCornerPaths paths;
 
-    // Timing (milliseconds)
-    private static final double SHOOT_MS = 2000; // shooter + intake + transfer
+    // Timing (milliseconds), measured from the end of path 1
+    private static final double WAIT_BEFORE_SHOOTER_MS = 5000; // robot waits, then shooter starts
+    private static final double WAIT_BEFORE_FEED_MS = 0;       // then intake + transfer start (2 s left of the 7 s pause = same moment)
+    private static final double FEED_MS = 3000;                // intake + transfer run, then everything stops
 
     @Override
     protected void buildPaths() {
@@ -37,14 +39,22 @@ public class BlueCornerAuto extends BaseAuto {
     @Override
     protected Command autoRoutine() {
         return sequential(
-                // ---- Drive to the shooting spot and shoot ----
+                // ---- Path 1 ----
                 follow(robot.follower, paths.path1()),
+
+                // ---- Wait 5 s, then start the shooter ----
+                waitMs(WAIT_BEFORE_SHOOTER_MS),
+                instant(() -> robot.shooter.run()),
+
+                // ---- With 2 s of the 7 s pause left, start intake + transfer ----
+                waitMs(WAIT_BEFORE_FEED_MS),
                 instant(() -> {
-                    robot.shooter.run();
                     robot.intake.run();
                     robot.transfer.feed();
                 }),
-                waitMs(SHOOT_MS),
+
+                // ---- After 3 s of intake + transfer, stop everything ----
+                waitMs(FEED_MS),
                 instant(() -> {
                     robot.shooter.stop();
                     robot.intake.stop();

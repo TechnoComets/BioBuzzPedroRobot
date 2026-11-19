@@ -15,18 +15,17 @@ import com.pedropathing.paths.Path;
 public class BlueCornerPaths {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    public final Pose start = poseFactory.of(24, 126, 145);   // PLACEHOLDER
-    private final Pose shoot = poseFactory.of(56, 90, 135);  // PLACEHOLDER
-    private final Pose park = poseFactory.of(40, 110, 90);    // PLACEHOLDER
+    public final Pose start = poseFactory.of(81.6018, 8.0672, 90);
+    private final Pose point1 = poseFactory.of(81.7989, 19.0264, 90);
+    private final Pose point2Start = poseFactory.of(81.7989, 19.0264, 0);
+    private final Pose point2 = poseFactory.of(133.56, 28.9333, 0);
 
-    /** Start -> shooting spot. */
     public Path path1() {
-        return Paths.line(start, shoot).linear(start, shoot);
+        return Paths.line(start, point1).linear(start, point1);
     }
 
-    /** Shooting spot -> park. */
     public Path path2() {
-        return Paths.line(shoot, park).linear(shoot, park);
+        return Paths.line(point2Start, point2).linear(point2Start, point2);
     }
 
     // Add more paths here (path3(), path4(), ...) and call them from BlueCornerAuto.
