@@ -1,44 +1,43 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.groups.Groups.sequential;
-import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.paths.AutoPaths;
 
 /**
- * The one autonomous. Keep this file short: it only says WHAT to do, in order.
- * Paths live in AutoPaths, hardware lives in Robot and subsystems/.
+ * Shared setup + main loop for every autonomous.
+ *
+ * Each Auto (BlueFrontAuto, RedCornerAuto, ...) extends this and only says:
+ *   1. where the robot starts      -> startPose()
+ *   2. what to do, in order        -> autoRoutine()
+ * Everything else (init, telemetry, keeping the follower running) lives here once.
  */
-@Autonomous(name = "Main Auto", group = "Autonomous")
-public class MainAuto extends LinearOpMode {
+public abstract class BaseAuto extends LinearOpMode {
 
-    private Robot robot;
-    private AutoPaths paths;
+    protected Robot robot;
 
-    // Autonomous routine. Add new steps here (more follow(...) calls, intake actions, etc.).
-    private Command autoRoutine() {
-        return sequential(
-                follow(robot.follower, paths.path1()),
-                follow(robot.follower, paths.path2()),
-                follow(robot.follower, paths.path3())
-        );
-    }
+    /** Where the robot is placed on the field at the start of the match. */
+    protected abstract Pose startPose();
+
+    /** The steps of this autonomous, in order. */
+    protected abstract Command autoRoutine();
+
+    /** Called once after the Robot is built, before startPose(). Create your paths here. */
+    protected abstract void buildPaths();
 
     @Override
     public void runOpMode() {
         Scheduler.reset();
         robot = new Robot(hardwareMap);
-        paths = new AutoPaths();
-        robot.setStartPose(paths.start);
+        buildPaths();
+        robot.setStartPose(startPose());
 
-        telemetry.addData("Status", "Initialized Pedro Path 1");
+        telemetry.addData("Status", "Initialized " + getClass().getSimpleName());
         telemetry.addData("Intake found", robot.intake.isAvailable());
         telemetry.addData("Limelight found", robot.vision.isAvailable());
         telemetry.addData("Transfer found", robot.transfer.isAvailable());

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 /**
- * The one TeleOp. Like MainAuto, it only says WHAT the driver can do; hardware lives in
+ * The one TeleOp. Like the Autos, it only says WHAT the driver can do; hardware lives in
  * Robot and subsystems/.
  *
  * Gamepad 1 controls
