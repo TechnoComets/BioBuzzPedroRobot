@@ -19,11 +19,13 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
  *   Right trigger     intake in
  *   Left trigger      intake out (clears jams)
  *   Left bumper       transfer: move pollen forward from the intake (hold)
- *   D-pad down        transfer: reverse (hold, clears jams)
+ *   Y / Triangle      transfer: reverse (hold, clears jams)
  *   A                 Limelight: AprilTag pipeline
  *   B                 Limelight: color pipeline
  *   X (hold)          auto-aim: turns toward the Limelight target (driver still controls forward/strafe)
- *   Y / Triangle      shooter servos: set to Config.SHOOTER_SERVO_PRESET_POSITION (0.75)
+ *   D-pad left        shooter servos: lock in place at Config.SHOOTER_SERVO_LOCK_POSITION (limp until pressed)
+ *   D-pad up          shooter servos: move +0.05 and stay locked
+ *   D-pad down        shooter servos: move -0.05 and stay locked
  *
  * NOTE: robot.update() is NOT called here, because it runs follower.update(), which is
  * Pedro's path-following loop and would fight manual motor power. Only vision is updated.
@@ -53,7 +55,6 @@ public class MainTeleOp extends LinearOpMode {
 
         boolean lastA = false;
         boolean lastB = false;
-        boolean lastY = false;
 
         try {
             while (opModeIsActive()) {
@@ -94,15 +95,14 @@ public class MainTeleOp extends LinearOpMode {
                 // ---- Transfer ----
                 if (gamepad1.left_bumper) {
                     robot.transfer.feed();
-                } else if (gamepad1.dpad_down) {
+                } else if (gamepad1.y) {
                     robot.transfer.reverse();
                 } else {
                     robot.transfer.stop();
                 }
 
-                // ---- Shooter servos (on button press, not while held) ----
-                if (gamepad1.y && !lastY) robot.shooterServos.setPosition(Config.SHOOTER_SERVO_PRESET_POSITION);
-                lastY = gamepad1.y;
+                // ---- Shooter servos: D-pad left = lock, up / down = move 0.05 and stay locked ----
+                robot.shooterServos.handleButtons(gamepad1.dpad_left, gamepad1.dpad_up, gamepad1.dpad_down);
 
                 // ----- Shooter ------
                 shooter.update(gamepad1.circle);
@@ -115,12 +115,12 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("Target seen", robot.vision.hasTarget());
                 telemetry.addData("tx", robot.vision.getTx());
                 telemetry.addData("Auto-aim active", aiming);
-                telemetry.addData("Y pressed", gamepad1.y);
                 telemetry.addData("Shooter Left found", robot.shooterServos.isLeftAvailable());
                 telemetry.addData("Shooter Right found", robot.shooterServos.isRightAvailable());
-                telemetry.addData("Shooter Target Pos", robot.shooterServos.getTargetPosition());
-                telemetry.addData("Shooter Left Pos", robot.shooterServos.getLeftPosition());
-                telemetry.addData("Shooter Right Pos", robot.shooterServos.getRightPosition());
+                telemetry.addData("Shooter servos locked", robot.shooterServos.isLocked());
+                telemetry.addData("Shooter servo position", "%.2f", robot.shooterServos.getLockPosition());
+                telemetry.addData("Shooter servo last change", robot.shooterServos.getLastChange());
+                telemetry.addData("Shooter Motor Speed", robot.shooter.getPower());
                 telemetry.update();
             }
         } finally {

@@ -49,12 +49,18 @@ public abstract class BaseAuto extends LinearOpMode {
 
         try {
             while (opModeIsActive()) {
+                // Shooter servos (same as TeleOp): D-pad left = lock, up / down = move 0.05 and stay locked
+                robot.shooterServos.handleButtons(gamepad1.dpad_left, gamepad1.dpad_up, gamepad1.dpad_down);
+
                 robot.update();
                 Scheduler.execute();
 
                 telemetry.addData("x", robot.follower.pose().x());
                 telemetry.addData("y", robot.follower.pose().y());
                 telemetry.addData("heading", robot.follower.pose().heading());
+                telemetry.addData("Shooter servos locked", robot.shooterServos.isLocked());
+                telemetry.addData("Shooter servo position", "%.2f", robot.shooterServos.getLockPosition());
+                telemetry.addData("Shooter servo last change", robot.shooterServos.getLastChange());
 
                 if (robot.follower.currentPath() != null) {
                     telemetry.addData("Current path distance remaining", robot.follower.distanceToEndpoint());

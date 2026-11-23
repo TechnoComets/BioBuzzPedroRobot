@@ -6,13 +6,12 @@ import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
 
 /**
- * Poses and paths for the RED FRONT autonomous (RedFrontAuto).
+ * Poses and paths for the RED FRONT autonomous (FrontAuto).
  *
  * Coordinates are Pedro field coordinates: x, y in inches (0-144), heading in degrees.
- * TODO: the numbers below are PLACEHOLDERS. Replace them with real ones from the Pedro visualizer.
  * Each path should start where the previous one ended.
  */
-public class RedFrontPaths {
+public class FrontPaths {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     public final Pose start = poseFactory.of(56, 8, 90);
@@ -28,5 +27,5 @@ public class RedFrontPaths {
         return Paths.curve(path1, point2Control1, point2).tangent();
     }
 
-    // Add more paths here (path3(), path4(), ...) and call them from RedFrontAuto.
+    // Add more paths here (path3(), path4(), ...) and call them from FrontAuto.
 }

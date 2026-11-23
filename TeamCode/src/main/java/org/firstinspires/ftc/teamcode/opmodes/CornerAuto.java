@@ -9,25 +9,24 @@ import com.pedropathing.ivy.Command;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.paths.BlueCornerPaths;
+import org.firstinspires.ftc.teamcode.paths.CornerPaths;
 
 /**
- * Autonomous for the BLUE CORNER starting position.
- * Paths live in BlueCornerPaths. The setup and main loop live in BaseAuto.
+ * Autonomous for the CORNER starting position.
+ * Paths live in CornerPaths. The setup and main loop live in BaseAuto.
  */
-@Autonomous(name = "Blue Corner Auto", group = "Autonomous")
-public class BlueCornerAuto extends BaseAuto {
+@Autonomous(name = "Corner Auto", group = "Autonomous")
+public class CornerAuto extends BaseAuto {
 
-    private BlueCornerPaths paths;
+    private CornerPaths paths;
 
     // Timing (milliseconds), measured from the end of path 1
-    private static final double WAIT_BEFORE_SHOOTER_MS = 5000; // robot waits, then shooter starts
-    private static final double WAIT_BEFORE_FEED_MS = 0;       // then intake + transfer start (2 s left of the 7 s pause = same moment)
-    private static final double FEED_MS = 3000;                // intake + transfer run, then everything stops
+    private static final double SHOOTER_WARMUP_MS = 5000; // shooter starts right after path 1 and warms up this long
+    private static final double FEED_MS = 3000;           // then intake + transfer run, then all three stop together
 
     @Override
     protected void buildPaths() {
-        paths = new BlueCornerPaths();
+        paths = new CornerPaths();
     }
 
     @Override
@@ -42,18 +41,17 @@ public class BlueCornerAuto extends BaseAuto {
                 // ---- Path 1 ----
                 follow(robot.follower, paths.path1()),
 
-                // ---- Wait 5 s, then start the shooter ----
-                waitMs(WAIT_BEFORE_SHOOTER_MS),
+                // ---- Start warming up the shooter right away (5 s before intake + transfer) ----
                 instant(() -> robot.shooter.run()),
+                waitMs(SHOOTER_WARMUP_MS),
 
-                // ---- With 2 s of the 7 s pause left, start intake + transfer ----
-                waitMs(WAIT_BEFORE_FEED_MS),
+                // ---- 5 s after path 1 (same time as before): start intake + transfer ----
                 instant(() -> {
                     robot.intake.run();
                     robot.transfer.feed();
                 }),
 
-                // ---- After 3 s of intake + transfer, stop everything ----
+                // ---- After 3 s of intake + transfer, stop shooter, intake and transfer together ----
                 waitMs(FEED_MS),
                 instant(() -> {
                     robot.shooter.stop();

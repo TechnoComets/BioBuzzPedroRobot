@@ -2,30 +2,36 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import static com.pedropathing.ivy.commands.Commands.instant;
 import static com.pedropathing.ivy.commands.Commands.waitMs;
+import static com.pedropathing.ivy.commands.Commands.waitUntil;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.ivy.Command;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.paths.RedFrontPaths;
+import org.firstinspires.ftc.teamcode.paths.FrontPaths;
 
 /**
- * Autonomous for the RED FRONT starting position.
- * Paths live in RedFrontPaths. The setup and main loop live in BaseAuto.
+ * Autonomous for the FRONT starting position.
+ * Paths live in FrontPaths. The setup and main loop live in BaseAuto.
  */
-@Autonomous(name = "Red Front Auto", group = "Autonomous")
-public class RedFrontAuto extends BaseAuto {
+@Autonomous(name = "Front Auto", group = "Autonomous")
+public class FrontAuto extends BaseAuto {
 
-    private RedFrontPaths paths;
+    private FrontPaths paths;
 
     // Timing (milliseconds)
-    private static final double SHOOT_MS = 3000; // shooter + intake + transfer (3 seconds)
+    private static final double SHOOTER_WARMUP_MS = 5000; // shooter spins this long before intake + transfer start
+    private static final double SHOOT_MS = 3000;          // shooter + intake + transfer all running (3 seconds)
+
+    // Counts how long the shooter has been warming up
+    private final ElapsedTime warmupTimer = new ElapsedTime();
 
     @Override
     protected void buildPaths() {
-        paths = new RedFrontPaths();
+        paths = new FrontPaths();
     }
 
     @Override
@@ -37,14 +43,24 @@ public class RedFrontAuto extends BaseAuto {
     @Override
     protected Command autoRoutine() {
         return sequential(
-                // ---- Drive to the shooting spot and shoot ----
-                follow(robot.follower, paths.path1()),
+                // ---- Start warming up the shooter right away, while driving path 1 ----
                 instant(() -> {
                     robot.shooter.run();
+                    warmupTimer.reset();
+                }),
+                follow(robot.follower, paths.path1()),
+
+                // ---- Wait until the shooter has warmed up for 5 s (counted from START) ----
+                waitUntil(() -> warmupTimer.milliseconds() >= SHOOTER_WARMUP_MS),
+
+                // ---- Now start intake + transfer to shoot ----
+                instant(() -> {
                     robot.intake.run();
                     robot.transfer.feed();
                 }),
                 waitMs(SHOOT_MS),
+
+                // ---- Stop shooter, intake and transfer at the same time ----
                 instant(() -> {
                     robot.shooter.stop();
                     robot.intake.stop();

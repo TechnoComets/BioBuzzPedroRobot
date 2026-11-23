@@ -54,7 +54,7 @@ public final class Config {
 
     // ---------------- Shooter ----------------
     public static final DcMotorSimple.Direction SHOOTER_DIRECTION = DcMotorSimple.Direction.FORWARD;
-    public static final double SHOOTER_POWER = 0.625;
+    public static final double SHOOTER_POWER = 0.7;
     public static final double SHOOTER_OUTTAKE_POWER = -1.0;
 
     // ---------------- Limelight ----------------
@@ -67,9 +67,13 @@ public final class Config {
     // ---------------- Shooter Opening Servos (Hood/Gate) ----------------
     public static final String SHOOTER_LEFT_SERVO_NAME = "ShooterServoLeft";
     public static final String SHOOTER_RIGHT_SERVO_NAME = "ShooterServoRight";
-    public static final double SHOOTER_DEFAULT_OPENING_POSITION = 0.5; // Target position to hold opening size against flywheel pressure
     // If the two servos face opposite directions (mirrored), set ONE of these to true.
     public static final boolean SHOOTER_LEFT_SERVO_REVERSED = false;
     public static final boolean SHOOTER_RIGHT_SERVO_REVERSED = true;
-    public static final double SHOOTER_SERVO_PRESET_POSITION = 0.5; // Position set when Y/Triangle is pressed in TeleOp
+    // Servos stay limp until D-pad left is pressed (Auto and TeleOp), then lock and hold here (0.0 to 1.0).
+    // Normal servos can't report their angle, so this one number is where "locked" is. Tune it on the robot.
+    public static final double SHOOTER_SERVO_LOCK_POSITION = 0.55;
+    // D-pad up / down moves the locked position by this much per press (servos stay locked).
+    // If up moves the wrong way, make this negative.
+    public static final double SHOOTER_SERVO_STEP = 0.05;
 }
